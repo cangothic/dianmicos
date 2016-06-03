@@ -9,3 +9,5 @@ direccion = strcat(local,'\zn1');
 addpath(direccion)
 direccion = strcat(local,'\zn2');
 addpath(direccion)
+direccion = strcat(local,'\estabilidad de un sistema discreto');
+addpath(direccion)
