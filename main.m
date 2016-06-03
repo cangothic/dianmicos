@@ -11,6 +11,8 @@ direccion = strcat(local,'\zn2');
 addpath(direccion)
 direccion = strcat(local,'\estabilidad de un sistema discreto');
 addpath(direccion)
+direccion = strcat(local,'\jury');
+addpath(direccion)
 while true
     display('ingrese 1 para categoria continuo')
     display('ingrese 2 para categoria discreto')
@@ -49,7 +51,7 @@ while true
                             den = input('ingrese el denominador de la planta');
                             k = input('ingrese k');
                             planta = tf(num,den);
-                            picoYFrecuenciaDeResonancia(planta,k)
+                            [picoDeResonancia,frecuenciaRezonancia] = picoYFrecuenciaDeResonancia(planta,k)
                             break
                     end
 
@@ -78,22 +80,29 @@ while true
         case 2
             display('presione 1 para analizar la estabilidad de un sistema')
             display('presione 2 para analizar la etabilidad de un sistema por routh')
+            display('presione 2 para analizar la etabilidad de un sistema por jury')
             categoria=input('');
             switch categoria
                 case 1
                     num = input('ingrese el numerador de la planta en dominio continuo');
-                    den = input('ingrese el denominador de la planta');
+                    den = input('ingrese el denominador de la planta en dominio continuo');
                     planta = tf(num,den);
                     plantadiscreta = discretizar(planta)
                     estabilidaDiscreto(plantadiscreta)
                     break
                 case 2
                     num = input('ingrese el numerador de la planta en dominio continuo');
-                    den = input('ingrese el denominador de la planta');
+                    den = input('ingrese el denominador de la planta dominio continuo');
                     planta = tf(num,den);
                     plantadiscreta = discretizar(planta)
                     routhdiscreto(plantadiscreta)
                     break
+                case 3
+                    num = input('ingrese el numerador de la planta en dominio continuo');
+                    den = input('ingrese el denominador de la planta dominio continuo');
+                    s = tf(num,den);
+                    plantadiscreta = discretizar(planta)
+                    metodoDeJury(plantadiscreta)
             end
 
             break
