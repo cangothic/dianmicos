@@ -1,7 +1,9 @@
 function [] = routhdiscreto(Gz)
 syms z
-[num,den]=tfdata(Gz);
+[num,den]=tfdata(Gz)
 Gz
+numconz=double(poly2sym(num))
+dencon2=double(poly2sym(den))
 p(z) = poly2sym(cell2mat(num),z)/poly2sym(cell2mat(den),z);
 syms w
 Gw=p((w+1)/(w-1));
