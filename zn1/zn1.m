@@ -16,34 +16,29 @@ function [] = zn1(Gs)
     pause
     tabla = generarTablaZn1(T,L)
     
-    figure
-    % Controlador P
+    figure    % Controlador P
     graficaControladorP(T,L)
     title('CONTROLADOR P')
     grid
     
-    figure
-    % Controlador PI
+    figure    % Controlador PI
     graficaControladorPI(T,L)
     title('CONTROLADOR PI')
     grid
    
     
-    figure
-    % Controlador PID
+    figure    % Controlador PID
     graficaControladorPID(T,L)
     title('CONTROLADOR PID')
     grid
     
-    figure
-    %Mostrar las graficas juntas
+    figure    %Mostrar las graficas juntas
     %controlador P
     graficaControladorP(T,L)
     hold on
     % Controlador PI
     graficaControladorPI(T,L)
     hold on
-
     % Controlador PID
     graficaControladorPID(T,L)
     hold on
