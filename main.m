@@ -13,6 +13,8 @@ direccion = strcat(local,'\estabilidad de un sistema discreto');
 addpath(direccion)
 direccion = strcat(local,'\jury');
 addpath(direccion)
+direccion = strcat(local,'\temas iniciales');
+addpath(direccion)
 while true
     display('ingrese 1 para categoria continuo')
     display('ingrese 2 para categoria discreto')
