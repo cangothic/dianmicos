@@ -1,6 +1,6 @@
 clc
 clear all
-decision = input(' 1-> Para Diseño de sistemas mediante LGR (clase1) \n 2-> Diseño de un controlador PI por asignacion de polos para un sistema de primer orden \n 3-> Diseño de un controlador PID por asignacion de polos para un sistema de segundo orden \n 4 controladores por el lugar geometrico de las raices');
+decision = input(' 1-> Para Diseño de sistemas mediante LGR (clase1) \n 2-> Diseño de un controlador PI por asignacion de polos para un sistema de primer orden \n 3-> Diseño de un controlador PID por asignacion de polos para un sistema de segundo orden');
 switch decision
     case 1
         syms Tp Wn Z Mp ts T o W
@@ -129,5 +129,109 @@ switch decision
         display('las variables validas son Tp,Wn,Z,Mp,ts,T,W')
         arreglo = input('ingrese arreglo de parametros con las variables validas ejemplo [Mp==0.05,ts==2.1] : ')
         solution = solve(a==0,b==0,c==0,d==0,e==0,g==0,arreglo,'IgnoreAnalyticConstraints', true)
+
         Tp = double(solution.Tp(1))
+        Wn = double(solution.Wn(1))
+        Z = double(solution.Z(1))
+        Mp = (double(solution.Mp(1)))
+        ts = (double(solution.ts(1)))
+        T = double(solution.T(1))
+        W = double(solution.W(1))
+        o = -1*double(solution.o(1))
+
+
+        solution = solve(a==0,b==0,c==0,d==0,e==0,g==0,arreglo,'IgnoreAnalyticConstraints', true)
+        num = input('ingrese el numerador de la planta')
+        den = input('ingrese el denominador de la planta')
+        [ZEROS,POLOS] = tf2zpk(num,den);
+        d1 = sqrt((POLOS(1)-o)^2+(W)^2)
+        d2 = sqrt((POLOS(2)-o)^2+(W)^2)
+        k = d1*d2
+        
+        Gp = tf(num,den);
+        nc = k;
+        dc = [0 1];
+        Gc = tf(nc,dc);
+        Gplc = feedback(Gp,1);
+        t= 0:0.01:10;
+        step(Gplc,t);
+        hold on
+        Gpc = series(Gp,Gc);
+        Gpclc = feedback(Gpc,1);
+        y = step(Gpclc,t);
+        tam = size(y);
+        error = 1 - y(tam(1))
+        grid
+        figure
+        %poner el error
+        display('PI por LGR, presione enter para continuar')
+        pause()
+        clc
+        A = (-o)/6
+        Gc = tf(k*[1 A],[1 0])
+        Gplc = feedback(Gp,1);
+        t= 0:0.01:10;
+        step(Gplc,t);
+        hold on
+        Gpc = series(Gp,Gc);
+        Gpclc = feedback(Gpc,1);
+        y = step(Gpclc,t);
+        tam = size(y);
+        error = 1 - y(tam(1))
+        grid
+        figure
+        %poner el error
+        display('PD por LGR, presione enter para continuar')
+        pause()
+        clc
+        %evaluar que el LGR no pasa por Pd
+        angulosPolos = 0;
+        i = 1;
+        tam = size(ZEROS)
+        while(i<=tam(1))
+            angulo = atan(W/abs(o-POLOS(i)))
+            angulo=angulo*180/pi
+            if(o<ZEROS(i))
+                angulosPolos = angulosPolos+(180-angulo);
+            else
+                angulosPolos = angulosPolos+angulo;
+            end
+            i = i+1;
+        end
+        angulosPolos = angulosPolos+180;
+        angulosPolos = mod(angulosPolos,360);
+        alfa = angulosPolos
+        b = (W/tan(alfa))-o
+        d0 = sqrt((b+o)^2+(W)^2)
+        k = (d1*d2)/d0
+        Gc = tf(k*[1 b],[1])
+        Gplc = feedback(Gp,1);
+        t= 0:0.01:10;
+        step(Gplc,t);
+        hold on
+        Gpc = series(Gp,Gc);
+        Gpclc = feedback(Gpc,1);
+        y = step(Gpclc,t);
+        tam = size(y);
+        error = 1 - y(tam(1))
+        grid
+        figure
+        
+        %poner el error
+        display('PID por LGR, presione enter para continuar')
+        pause()
+        clc
+        a = abs(o/6);
+        Gc = tf(k*conv([1 a],[1 b]),[1 0])
+        Gplc = feedback(Gp,1);
+        t= 0:0.01:10;
+        step(Gplc,t);
+        hold on
+        Gpc = series(Gp,Gc);
+        Gpclc = feedback(Gpc,1);
+        y = step(Gpclc,t);
+        tam = size(y);
+        error = 1 - y(tam(1))
+    
+        grid
 end

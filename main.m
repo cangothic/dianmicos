@@ -1,3 +1,4 @@
+
 local = pwd;
 direccion = strcat(local,'\diagramas de bode');
 addpath(direccion)
@@ -18,7 +19,7 @@ addpath(direccion)
 while true
     display('ingrese 1 para categoria continuo')
     display('ingrese 2 para categoria discreto')
-    display('ingrese 3 para salir')
+    display('ingrese 0 para salir')
     categoria = input('');
     switch categoria
         case 1
